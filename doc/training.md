@@ -72,9 +72,7 @@ Bei der Entwicklung von Icinga Web 2 wurde auf drei Schwerpunkte Wert gelegt:
 * Zuverlässigkeit
 
 
-Wir haben uns zwar der DevOps-Bewegung verschrieben, unsere Zielgruppe ist mit Icinga Web 2 aber ganz klar der Operator, der Admin. Wir versuchen darum:
-
-* keine Abhängigkeiten von ...
+Wir haben uns zwar der DevOps-Bewegung verschrieben, unsere Zielgruppe ist mit Icinga Web 2 aber ganz klar der Operator, der Admin. Wir versuchen darum möglichst wenig Abhängigkeiten von externen Komponenten zu haben. Wir verzichten so auf das ein oder andere hippe Feature, dafür geht dann aber auch weniger kaputt wenn die Hippster in der nächsten Version wieder alles anders machen wollen. Bestes Beispiel ist dieser Workshop: mittlerweile ein Jahr alt, lange vor der ersten Stable Release von Icinga Web 2 geschrieben - und dennoch funktionieren fast alle Übungen nach wie vor ohne Änderungen am Code.
 
 Die Web-Oberfläche wurde entworfen, um problemlos Wochen- und Monatelang auf demselben Bildschirm an der Wand hängen zu können. Wir wollen uns darauf verlassen können, dass was wir dort sehen dem aktuellen Stand unserer Umgebung entspricht. Gibt es Probleme, werden diese visualiert, auch wenn sie in der Anwendung selbst liegen. Wird das Problem behoben, muss alles weiterlaufen wie gehabt. Und das ohne, dass jemand eine Tastatur anstöpseln und manuell eingreifen muss.
 
@@ -82,7 +80,7 @@ Die Web-Oberfläche wurde entworfen, um problemlos Wochen- und Monatelang auf de
 ## Benutzte Bibliotheken
 
 * Zend Framework 1.x
-* jQuery 1.11 und 2.1.0
+* jQuery 1.11 und 2.1
 * Kleinere PHP-Libraries
   * HTMLPurifier
   * DOMPdf
@@ -135,6 +133,25 @@ Fertig. Um den Installationswizard benutzen zu dürfen ist aus Sicherheitsgründ
 
   http://localhost
 
+## Volle Installation mit Webserver
+
+Wir haben bisher spaßeshalber Icinga Web 2 ohne externen Webserver laufen lassen. Das würde sogar für die meisten produktiven Umgebungen performant genug sein, dennoch fühlen sich die meisten von uns mit einem "richtigen" Webserver wohler. Wir stoppen also falls nicht schon geschehen den PHP-Prozess und räumen erst mal auf:
+
+```sh
+rm -rf /tmp/FileCache_icingaweb/ /var/lib/php5/sess_*
+```
+
+Diese vermutlich von root erstellten Dateien würden uns ansonsten lediglich Probleme bereiten. Dann installieren wir unseren Webserver:
+
+```
+apt-get install libapache2-mod-php5
+./icingaweb2/bin/icingacli setup config webserver apache \
+  > /etc/apache2/conf.d/icingaweb2.conf
+service apache2 restart
+```
+
+Du siehst richtig, Icinga Web 2 kann sich seine Konfiguration für Apache (2.x, auch kompatibel zu 2.4) selbst generieren. Das gilt nicht nur für den Apache, sondern auch für Nginx.
+
 ## Das Konfigurationsverzeichnis
 
 Falls nicht anders konfiguriert, sucht Icinga Web 2 seine Konfiguration in `/etc/icingaweb`. Dies lässt sich mit der Umgebungsvariable ICINGAWEB_CONFIGDIR jederzeit überschreiben. Auch im Webserver können wir dies nutzen:
@@ -154,6 +171,12 @@ Gerade wer immer mit dem aktuellsten Versionsstand arbeiten oder gefahrlos zwisc
 Bei der Installation aus Paketen muss man sich um nichts kümmern, für unsere GIT-Arbeitskopie erstellen wir der Bequemlichkeit halber noch einen symbolischen Link:
 
     ln -s /usr/local/icingaweb2/bin/icingacli /usr/local/bin/
+
+## Installation aus Paketen
+
+Das Icinga Projekt baut täglich aktuelle Snapshots für verschiedenste Betriebssysteme, die Paketquellen gibt es unter [packages.icinga.org](https://packages.icinga.org/). Der aktuelle Buildstatus lässt sich unter [build.icinga.org](https://build.icinga.org/jenkins/view/Icinga%20Web%202/) verfolgen, und die aktuelle Entwicklung jederzeit unter [git.icinga.org](https://git.icinga.org/?p=icingaweb2.git) oder auf [GitHub](https://github.com/Icinga/icingaweb2/).
+
+Für unser Training nutzen wir aber direkt das Git-Repository. Und auch in Produktion mache ich das nicht ungern. Checksummen für alles, geänderte Dateien bleiben nie unentdeckt, Versionswechsel passieren in einem Sekundenbruchteil - welches Paketmanagement kann das schon bieten? Außerdem zeigt dieses Vorgehen schön, wie simpel Icinga Web 2 eigentlich ist. Wir mussten zur Installation keine einzige Datei im Quellverzeichnis ändern. Automake, configure? Wozu denn?! Die Konfiguration liegt woanders, und WO sie liegt wird der Laufzeitumgebung mitgeteilt.
 
 # Ein eigenes Modul erstellen
 
@@ -185,7 +208,8 @@ Wir arbeiten im Training mit VIM und nehmen ein paar erste Einstellungen vor:
 
     echo 'syntax on
     set expandtab
-    set tabstop=4' > /root/.vimrc
+    set tabstop=4
+    set shiftwidth=4' > /root/.vimrc
 
 ## Eigene CLI-Commands
 
@@ -263,10 +287,6 @@ Die Icinga CLI stellt Autovervollständigung für alle Module, Kommandos und Akt
     apt-get install bash-completion
     cp etc/bash_completion.d/icingacli /etc/bash_completion.d/
     . /etc/bash_completion
-
-Sobald ein Parameter eindeutig ist, kann man entsprechend abkürzen:
-
-    icingacli train sa h
 
 Ist die Eingabe mehrdeutig wie bei `icingacli mo`, dann wird eine entsprechende Hilfe angezeigt.
 
@@ -691,6 +711,10 @@ Wenn wir in den Entwickler-Tools unseres Browsers die Requests beobachten sehen 
 
 Wie wir sehen wird durch entsprechende Präfixe sichergestellt, dass unser CSS immer nur in jenen Containern gilt, in denen unser Modul seine Inhalte darstellt.
 
+## Nützliche CSS-Klassen
+
+Icinga Web 2 stellt eine Reihe von CSS-Klassen bereit, die uns die Arbeit einfacher machen. So ist `common-table` nützlich für die üblichen Listen in Tabellen, `name-value-table` Für Name/Wert-Paare bei denen links der Bezeichner als th und rechts der entsprechende Wert in einem td dargestellt wird. Hilfreich ist auch `table-row-selectable` - damit verändert sich das Verhalten der Tabelle. Die ganze Zeile wird hervorgehoben, wenn man mit der Maus darüber fährt. Wenn man irgendwo klickt, kommt der erste Link der Zeile zum Zug. In Kombination mit `common-table` sieht das Ganze ohne zusätzliche Arbeit dann auch schon gleich gut aus.
+
 # Echte Daten aufgeräumt
 
 Wie wir vorhin gesehen haben, wird so ein Modul erst mit echten Daten so richtig interessant. Was wir allerdings falsch gemacht haben ist, dass unser Controller die Daten selbst besorgt. Das ist unschön und würde uns spätestens wenn wir diese Daten auch auf der CLI nutzen möchten Probleme bereiten.
@@ -824,7 +848,7 @@ $query = Directory::selectFiles(
     $this->Module()->getBaseDir()
 )->order('type')->order('name');
 
-$this->view->files = $query->->fetchAll();
+$this->view->files = $query->fetchAll();
 ```
 
 ## Aufgabe 1
