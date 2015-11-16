@@ -574,7 +574,9 @@ Menü-Einträge in Icinga Web 2 können einerseits personalisiert und / oder vom
 ```php
 <?php
 
-$this->menuSection('Training')->add('Hello World')->setUrl('training/hello/world');
+$this->menuSection('Training')
+     ->add('Hello World')
+     ->setUrl('training/hello/world');
 ```
 
 ### Icons für Menü-Einträge
