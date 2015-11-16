@@ -347,7 +347,7 @@ Wir können Kommandozeilen-Parameter natürlich vollumfänglich selbst kontrolli
      */
     public function fromAction()
     {
-        $to = $this->params->get('from', 'Nowhere');
+        $from = $this->params->get('from', 'Nowhere');
         echo "Hello from $from!\n";
     }
 ```
