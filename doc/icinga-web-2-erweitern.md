@@ -477,7 +477,7 @@ Wie wir eben gesehen haben, kann die Icinga CLI farbigen Output erstellen. Über
 
 ```php
 <?php
-echo $this->colorize("Hello from $from!\n", 'lightblue');
+echo $this->screen->colorize("Hello from $from!\n", 'lightblue');
 ```
 
 Als optionalen dritten Parameter kann man der `colorize()`-Funktion eine Hintergrundfarbe mitgeben. Für die Darstellung der Farben werden ANSI escape codes benutzt. Erkennt Icinga CLI, dass die Ausgabe NICHT auf in ein Terminal/TTY erfolgt, werden keine Farben ausgegeben. Damit wird sichergestellt, dass z.B. beim Umleiten der Ausgabe in eine Datei keine störenden Sonderzeichen aufscheinen.
