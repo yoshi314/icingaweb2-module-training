@@ -444,6 +444,7 @@ public function kaputtAction()
 {
     throw new ProgrammingError('No way');
 }
+```
 
 ### Aufruf
 
