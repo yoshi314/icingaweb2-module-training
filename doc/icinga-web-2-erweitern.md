@@ -532,7 +532,7 @@ class HelloController extends Controller
     {
     }
 }
-    ```
+```
 
 Wenn wir die Url ( training/application/controllers ) jetzt aufrufen, erhalten wir eine Fehlermeldung:
 
