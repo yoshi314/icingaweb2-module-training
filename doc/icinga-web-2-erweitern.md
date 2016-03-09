@@ -619,7 +619,7 @@ F√ºr unseren konkreten fall also http://localhost/img/training/tgelf.jpg. Das l√
 ```php
 ...
 <div class="content">
-<?= $this->img('img/training/tgelf.jpg', 'Thomas Gelf') ?> Here you go...
+<?= $this->img('img/training/tgelf.jpg', array('title' => 'Thomas Gelf')) ?> Here you go...
 </div>
 ```
 
@@ -666,9 +666,9 @@ This example is provided by <a href="http://www.netways.de">Netways</a>
 and based on <?= $this->application ?>.
 
 <table>
-<? foreach ($this->moreData as $key => $val): ?>
+<?php foreach ($this->moreData as $key => $val): ?>
     <tr><th><?= $key ?></th><td><?= $val ?></td></tr>
-<? endforeach ?>
+<?php endforeach ?>
 </table> 
 ```
 
