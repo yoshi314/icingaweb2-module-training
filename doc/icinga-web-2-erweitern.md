@@ -1,26 +1,30 @@
-# Icinga Web 2 erweitern
+# Extending Icinga Web 2
 
-## Eigene Icinga Web Module schreiben
+## Writing your own Icinga Web Module
 
-Herzlich willkommen! Schön dass du hier bist, um deine ersten eigenen Icinga Web Module zu schreiben. Icinga Web macht uns den Einstieg möglichst einfach. In den nächsten Stunden werden wir anhand einer Reihe praktischer Beispiele entdecken, wie angenehm das Ganze ist.
+Welcome! Nice to see you're here to write your very first Icinga Web module. Icinga Web makes it as easy as possible. During the next hour, we'll show you with a help of series of examples how easy it is.
 
 ## Soll ich wirklich? Warum?
 
-Unbedingt, warum nicht? Es ist herrlich einfach, und Icinga ist 100% freie Open Source Software mit einer großartigen Community. Icinga Web 2 stellt eine stabile, einfach verständliche und zukunftssichere Plattform dar. Also eigentlich genau das, worauf man eigene Projekte aufbauen möchte.
+## Do i really need it? Why?
 
-## Nur für's Monitoring?
+Of course, why not? It's wonderfully easy, and Icinga is a 100% free Open Source Software with a great community. Icinga Web 2 represents a stable, easy to understand and future-proof Platform. It is exactly what you need to build your own project from.
 
-Überhaupt nicht! Klar, Monitoring ist da wo Icinga Web herkommt. Dort hat es seine Stärken, dort ist es zu Hause. Nachdem Monitoring-Systeme ohnehin mit allen möglichen Systemen in- und außerhalb des eigenen Rechenzentrums kommunizieren fanden wir es naheliegend, dies jetzt auch im Frontend auf ähnliche Weise zu tun.
+## Is it only for monitoring?
 
-Icinga Web will ein modulares Framework sein, welches die Integration von Drittsoftware möglichst einfach gestalten will. Gleichzeitig wollen wir es getreu dem Open Source Gedanken auch Dritten einfach machen, Logik von Icinga möglichst bequem in deren eigenen Projekten zu nutzen.
+Not quite so! Of course, monitoring is what Icinga Web comes from. That's its strong point, where it feels at home. Since monitoring systems can communicate with all possible systems/appliances in and out of your Datacenter, we find it obvious that the front-end could do the same.
 
-Ob es jetzt um die reine Verlinkung von Drittsystemen, die Anbindung einer CMDB oder die Visualisierung von komplexen Systemen als Ergänzung zu herkömmlichen Check-Plugins geht - der Fantasie sind hier keine Grenzen gesetzt.
+Icinga Web wants to be a modular framework, which aims to provide possibly easy integration of third-party software. We want to offer honest words of thanks for 3rd party projects - it's easy to use Icinga Logic with their own software.
 
-## Ich bin aber kein PHP/JavaScript/HTML5 Hacker
 
-Kein Problem. Freilich schadet es nicht, über fundierte Kenntnisse der Webentwicklung zu verfügung. Icinga Web erlaubt es aber, auch ohne tiefgehende PHP/HTML/CSS-Kenntnisse eigene Module schreiben zu können.
+Whether you want connection with 3rd party system, connection to a CMDB or complement classic monitoring with complex system visualization - it all can be done.
 
-# Vorbereitung
+
+## But I don't know any PHP/JavaScript/HTML5
+
+No problem. It's not a big problem to get started, no need for in-depth knowledge of web development to get going with writing your own modules.
+
+# Preparation
 
 Wir nutzen für die Schulung eine Debian Basis-Installation um zu zeigen, wie wenig Abhängigkeiten Icinga Web 2 hat. Es gibt zwar Pakete für alle gängigen Distributionen, wir werden in der Schulung für den besseren Lerneffekt aber direkt mit dem GIT Source-Tree arbeiten.
 
