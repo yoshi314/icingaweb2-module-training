@@ -25,49 +25,53 @@ Whether you want connection with 3rd party system, connection to a CMDB or compl
 No problem. It's not a big problem to get started, no need for in-depth knowledge of web development to get going with writing your own modules.
 
 # Preparation
+For the purpose of this training, we'll use a basic Debian installation - mostly to show how little dependencies Icinga Web 2 has. While there are packages for all common distributions, for better learning effect we'll be working directly with GIT source tree.
 
-Wir nutzen für die Schulung eine Debian Basis-Installation um zu zeigen, wie wenig Abhängigkeiten Icinga Web 2 hat. Es gibt zwar Pakete für alle gängigen Distributionen, wir werden in der Schulung für den besseren Lerneffekt aber direkt mit dem GIT Source-Tree arbeiten.
+To wake up our notebooks from weekend nap, let's start with a simple exercise:
 
-Damit unsere Notebooks aus dem Wochenendschlaf erwachen, geben wir denen schon mal eine kleine Aufgabe:
 
     apt-get update
 
-    # Ein paar nützliche Tools für den Workshop:
+    # A few useful tools to get started
     apt-get install git vim wget
 
-    # Abhängigkeiten für Icinga Web 2:
+    # Icinga Web 2 dependencies:
     apt-get install php5-cli php5-mysql php5-gd php5-intl php5-ldap
 
-    # Aktueller Quellcode aus dem Icinga Web 2 Master:
+    # up to date source code of Icinga Web 2 master branch:
     cd /usr/local
     git clone https://git.icinga.org/icingaweb2.git
 
-In der Zwischenzeit widmen wir uns dann der Einführung!
+While git does its thing, let's read up the training plan:
 
-## Aufbau des Trainings
+## Training plan
 
-* Einrichtung von Icinga Web 2
-* Erstellung eines eigenen Moduls
-  * Eigene CLI-Commands
+* Icinga Web 2 Architecture
+* Preparing your own module
+  * Own CLI commands
   * Arbeiten mit Parametern
+  * Working with parameters
   * Farben und andere Gimmiks
+  * Colors and other gimmicks
 * Erweiterung der Web-Frontends
-  * Eigene Bilder
-  * Eigene Stylesheets
-  * Erweiterung des Menüs
-  * Bereitstellung von Dashboards
-* Das Arbeiten mit Daten
-  * Bereitstellen von Daten
-  * Code in Bibliotheken packen
-  * Arbeiten mit Parametern
+* Extending the Web Frontend
+  * Custom pictures
+  * Custom stylesheets
+  * Extending menus
+  * Preparing Dashboards
+* Working with data
+  * Preparation
+  * Putting code in libraries
+  * Working with parameters
   * Tricks zum bequemen Arbeiten
-* Konfiguration
-* Übersetzungen
-* Integration in Dritt-Software
-* Freies Lab
+  * Tricks for improving workflow
+* Configuration
+* Translations
+* Integration with 3rd party software
+* Free Lab
 
 
-## Icinga Web 2 Architektur
+## Icinga Web 2 Architecture
 
 Bei der Entwicklung von Icinga Web 2 wurde auf drei Schwerpunkte Wert gelegt:
 
