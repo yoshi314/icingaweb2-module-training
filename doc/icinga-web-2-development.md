@@ -73,47 +73,46 @@ While git does its thing, let's read up the training plan:
 
 ## Icinga Web 2 Architecture
 
-Bei der Entwicklung von Icinga Web 2 wurde auf drei Schwerpunkte Wert gelegt:
+During the development of Icinga Web 2 , the following things were the points of focus:
 
-* Einfachheit.
-* Geschwindigkeit
-* Zuverlässigkeit
+* Simplicity.
+* Speed
+* Reliability
 
+We have already the DevOps movement described, our target user group for Icinga Web 2 are the administrators. Therefore we're trying to keep amount of external dependencies as low as possible. Therefore we give up on various hip features, to reduce likelihood of breakage due to upstream changes resulting in change of functionality. Best example is this training - prepared over the course of a year, long before first stable release of Icinga Web 2 - and yet it works just fine with almost all exercises without any changes required.
 
-Wir haben uns zwar der DevOps-Bewegung verschrieben, unsere Zielgruppe ist mit Icinga Web 2 aber ganz klar der Operator, der Admin. Wir versuchen darum möglichst wenig Abhängigkeiten von externen Komponenten zu haben. Wir verzichten so auf das ein oder andere hippe Feature, dafür geht dann aber auch weniger kaputt wenn die Hippster in der nächsten Version wieder alles anders machen wollen. Bestes Beispiel ist dieser Workshop: mittlerweile ein Jahr alt, lange vor der ersten Stable Release von Icinga Web 2 geschrieben - und dennoch funktionieren fast alle Übungen nach wie vor ohne Änderungen am Code.
+The web interface was designed so as to be able to present weekly or monthly problem overview on single screen, that could be e.g. put up on a wall mounted display. We wanted to be able to let us see there the state representing our environment. Any potential issues would be presented there, also when they stem from the application itself. Resolving the problem should keep things running as usual. And this without necessity of manual interaction.
 
-Die Web-Oberfläche wurde entworfen, um problemlos Wochen- und Monatelang auf demselben Bildschirm an der Wand hängen zu können. Wir wollen uns darauf verlassen können, dass was wir dort sehen dem aktuellen Stand unserer Umgebung entspricht. Gibt es Probleme, werden diese visualiert, auch wenn sie in der Anwendung selbst liegen. Wird das Problem behoben, muss alles weiterlaufen wie gehabt. Und das ohne, dass jemand eine Tastatur anstöpseln und manuell eingreifen muss.
-
-
-## Benutzte Bibliotheken
+## Used libraries
 
 * Zend Framework 1.x
 * jQuery 1.11 und 2.1
-* Kleinere PHP-Libraries
+* Smaller PHP Libraries
   * HTMLPurifier
   * DOMPdf
   * lessphp
   * Parsedown
-* Kleinere JS-Bibliotheken
+* Smaller JS libraries
   * jquery-...
 
-## Anatomie eines Icinga Web 2 Moduls
+## Anatomy of an Icinga Web 2 module
 
-Icinga Web 2 folgt dem Paradigma "Konvention vor Konfiguration". Nach den Erfahrungen mit Icinga Web 1 kamen wir zu dem Ergebnis, dass eines der besten Tools zur XML-Verarbeitung auf jeder Platte liegt: `/bin/rm`. Wer sich an ein paar einfache Konventionen hält, spart sich eine Menge Konfigurationsarbeit. Grundsätzlich gilt, dass man in Icinga Web nur für ganz spezielle Fälle Pfade konfigurieren muss. Meist reicht es, eine Datei einfach an die richtige Stelle zu speichern.
 
-Ein umfangreiches, erwachsenes Modul könnte in etwa folgende Struktur aufweisen:
+Icinga Web 2 follows the paradigm of "conventional configuration". After our experiences with Icinga Web 1, we came to conclusion, that the best tool for XML processing is `/bin/rm` . Who sticks to simpler conventions, spares himself a lot of configuration work. The basic assumption being that one needs to dig through configuration files only on special occasions with Icinga Web. It is usually suffices to just copy a file into a specific location, with minor edits.
+
+A complex, mature module could contain the following structure:
 
     .
-    └── training                Basis-Verzeichnis des Moduls
+    └── training                Main directory of the module
         ├── application
-        │   ├── clicommands     CLI Befehle
+        │   ├── clicommands     CLI commands
         │   ├── controllers     Web Controller
-        │   ├── forms           Formulare
-        │   ├── locale          Übersetzungen
+        │   ├── forms           Forms
+        │   ├── locale          Translations
         │   └── views
-        │       ├── helpers     View Helper
-        │       └── scripts     View Skripte
-        ├── configuration.php   Bereitstellen von Menü, Dashlets, Berechtigungen
+        │       ├── helpers     View Helpers
+        │       └── scripts     View Scripts
+        ├── configuration.php   Preparation methods of Menu, Dashlets, Authentication
         ├── doc                 Dokumentation
         ├── library
         │   └── Training        Library-Code, Modul-Namensraum
