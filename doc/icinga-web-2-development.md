@@ -159,27 +159,30 @@ You're not mistaken here - Icinga Web 2 can generate its own configuration for A
 
 ## The configuration structure
 
-Falls nicht anders konfiguriert, sucht Icinga Web 2 seine Konfiguration in `/etc/icingaweb`. Dies lässt sich mit der Umgebungsvariable ICINGAWEB_CONFIGDIR jederzeit überschreiben. Auch im Webserver können wir dies nutzen:
+Unless otherwise setup, Icinga Web 2 looks for its config files in `/etc/icingaweb`. This can be overridden with environment variable ICINGAWEB_CONFIGDIR. It can be also done in web server configuration:
+
 
     SetEnv ICINGAWEB_CONFIGDIR /another/directory
 
-## Verwalten mehrerer Modul-Pfade
+## Setting up more module paths
 
-Gerade wer immer mit dem aktuellsten Versionsstand arbeiten oder gefahrlos zwischen GIT-Branches hin- und herwechseln möchte, der will für gewöhnlich ungern Dateien in seiner Arbeitskopie ändern müssen. Darum empfiehlt es sich, von Beginn an parallel mehrere Modul-Pfade zu benutzen. Dies kann in den System-Einstellungen oder in der Konfiguration unter `/etc/icingaweb/config.ini` vorgenommen werden:
+In case you want to work with up to date version or safely switch git branches back and forth, you'll likely be reluctant to have your working copy affected by it. It is therefore recommended to use multiple module paths from the very start. This can be done in system preferences, or in the config file `/etc/icingaweb/config.ini` : 
 
     [global]
     module_path= "/usr/local/icingaweb-modules:/usr/local/icingaweb2/modules"
 
 
-## Icinga CLI einrichten
+## Setting up Icinga CLI
 
-Bei der Installation aus Paketen muss man sich um nichts kümmern, für unsere GIT-Arbeitskopie erstellen wir der Bequemlichkeit halber noch einen symbolischen Link:
+Unless installing from repository, you'll have to set up the icingacli symlink - merely for convenience's sake :
 
     ln -s /usr/local/icingaweb2/bin/icingacli /usr/local/bin/
 
-## Installation aus Paketen
+## Installing from packages
 
-Das Icinga Projekt baut täglich aktuelle Snapshots für verschiedenste Betriebssysteme, die Paketquellen gibt es unter [packages.icinga.org](https://packages.icinga.org/). Der aktuelle Buildstatus lässt sich unter [build.icinga.org](https://build.icinga.org/jenkins/view/Icinga%20Web%202/) verfolgen, und die aktuelle Entwicklung jederzeit unter [git.icinga.org](https://git.icinga.org/?p=icingaweb2.git) oder auf [GitHub](https://github.com/Icinga/icingaweb2/).
+
+Icinga project builds weekly snapshots for various operating systems. The packages are available under [packages.icinga.org](https://packages.icinga.org/). Current build status can be seen on [build.icinga.org](https://build.icinga.org/jenkins/view/Icinga%20Web%202/) , and the current development code is available on [git.icinga.org](https://git.icinga.org/?p=icingaweb2.git) or [GitHub](https://github.com/Icinga/icingaweb2/).
+
 
 Für unser Training nutzen wir aber direkt das Git-Repository. Und auch in Produktion mache ich das nicht ungern. Checksummen für alles, geänderte Dateien bleiben nie unentdeckt, Versionswechsel passieren in einem Sekundenbruchteil - welches Paketmanagement kann das schon bieten? Außerdem zeigt dieses Vorgehen schön, wie simpel Icinga Web 2 eigentlich ist. Wir mussten zur Installation keine einzige Datei im Quellverzeichnis ändern. Automake, configure? Wozu denn?! Die Konfiguration liegt woanders, und WO sie liegt wird der Laufzeitumgebung mitgeteilt.
 
