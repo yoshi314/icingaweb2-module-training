@@ -48,22 +48,18 @@ While git does its thing, let's read up the training plan:
 
 * Icinga Web 2 Architecture
 * Preparing your own module
-  * Own CLI commands
-  * Arbeiten mit Parametern
+  * CLI commands
   * Working with parameters
-  * Farben und andere Gimmiks
   * Colors and other gimmicks
-* Erweiterung der Web-Frontends
 * Extending the Web Frontend
-  * Custom pictures
-  * Custom stylesheets
+  * Adding pictures
+  * Adding stylesheets
   * Extending menus
   * Preparing Dashboards
 * Working with data
   * Preparation
   * Putting code in libraries
   * Working with parameters
-  * Tricks zum bequemen Arbeiten
   * Tricks for improving workflow
 * Configuration
 * Translations
@@ -125,30 +121,32 @@ A complex, mature module could contain the following structure:
         └── test
             └── php             PHP Unit-Tests
 
-Wir werden uns eine solche im Rahmen dieses Trainings Schritt für Schritt erarbeiten und mit Leben befüllen.
+We'll go step by step through this layout during the training and fill out our project with necessary files.
 
-## Source Tree vorbereiten
+## Preparing the source tree
 
-Um loslegen zu können benötigen wir zuallererst Icinga Web 2. Dieses lässt sich aus dem GIT Source Tree auschecken und direkt an Ort und Stelle benutzen. Setzt man anschließend `DocumentRoot` eines entsprechend konfigurierten Webservers in das public-Verzeichnis, kann man auch schon loslegen. Zu Testzwecken geht es aber auch noch einfacher:
+
+In order to get started, we need Icinga Web 2 first. We can do it by checking out its git source tree and using it on the spot. Setting up one's webserver of choice to serve the `public` directory is one way to quickly get started. There are also simpler alternatives:
 
     cd /usr/local
-    # Wenn noch nicht erledigt:
+    # if you haven't done so already:
     git clone https://git.icinga.org/icingaweb2.git
     ./icingaweb2/bin/icingacli web serve
 
-Fertig. Um den Installationswizard benutzen zu dürfen ist aus Sicherheitsgründen ein Token erforderlich. Man wird von der Weboberfläche Damit stellen wir sicher, dass es zwischen Installation und Einrichtung nie einen Zeitpunkt gibt, zu welchem ein Angreifer eine Umgebung übernehmen könnte. Für Packager ist dieser Punkt vollkommen opional, selbiges gilt für jene die Icinga Web mit einem CM-Tool wie Puppet ausrollen: liegt eine Konfiguration auf dem System, so bekommt man den Wizard nie zu Gesicht.
+All set to go. In order to use the installation wizard, a Token is required for security purposes. This guarantees that the web interface is not accessible by anyone else between installation and initial configuration. For packagers, this step is completely optional, as they'll be likely to roll out the installation with a CM tool, like Puppet; the configuration is located in files, so there is no need to use the wizard.
 
   http://localhost
 
-## Volle Installation mit Webserver
+## Full installation with a web server
 
-Wir haben bisher spaßeshalber Icinga Web 2 ohne externen Webserver laufen lassen. Das würde sogar für die meisten produktiven Umgebungen performant genug sein, dennoch fühlen sich die meisten von uns mit einem "richtigen" Webserver wohler. Wir stoppen also falls nicht schon geschehen den PHP-Prozess und räumen erst mal auf:
+
+We have so far ran Icinga Web 2 without an external web server. Even though that's good enough for sake of this training, we feel that doing a "proper" installation would be more proper course of action. We'll also make sure that PHP process starts with a blank slate, so we'll clean up its work directory:
 
 ```sh
 rm -rf /tmp/FileCache_icingaweb/ /var/lib/php5/sess_*
 ```
 
-Diese vermutlich von root erstellten Dateien würden uns ansonsten lediglich Probleme bereiten. Dann installieren wir unseren Webserver:
+These files, if placed there by root user, might cause us issues later on. Let's get the web server installed:
 
 ```
 apt-get install libapache2-mod-php5
@@ -157,9 +155,9 @@ apt-get install libapache2-mod-php5
 service apache2 restart
 ```
 
-Du siehst richtig, Icinga Web 2 kann sich seine Konfiguration für Apache (2.x, auch kompatibel zu 2.4) selbst generieren. Das gilt nicht nur für den Apache, sondern auch für Nginx.
+You're not mistaken here - Icinga Web 2 can generate its own configuration for Apache (2.2 but it's also compatible with 2.4). This is not limited to Apache only, as it works with nginx as well.
 
-## Das Konfigurationsverzeichnis
+## The configuration structure
 
 Falls nicht anders konfiguriert, sucht Icinga Web 2 seine Konfiguration in `/etc/icingaweb`. Dies lässt sich mit der Umgebungsvariable ICINGAWEB_CONFIGDIR jederzeit überschreiben. Auch im Webserver können wir dies nutzen:
 
