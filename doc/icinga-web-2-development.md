@@ -4,8 +4,6 @@
 
 Welcome! Nice to see you're here to write your very first Icinga Web module. Icinga Web makes it as easy as possible. During the next hour, we'll show you with a help of series of examples how easy it is.
 
-## Soll ich wirklich? Warum?
-
 ## Do i really need it? Why?
 
 Of course, why not? It's wonderfully easy, and Icinga is a 100% free Open Source Software with a great community. Icinga Web 2 represents a stable, easy to understand and future-proof Platform. It is exactly what you need to build your own project from.
@@ -15,7 +13,6 @@ Of course, why not? It's wonderfully easy, and Icinga is a 100% free Open Source
 Not quite so! Of course, monitoring is what Icinga Web comes from. That's its strong point, where it feels at home. Since monitoring systems can communicate with all possible systems/appliances in and out of your Datacenter, we find it obvious that the front-end could do the same.
 
 Icinga Web wants to be a modular framework, which aims to provide possibly easy integration of third-party software. We want to offer honest words of thanks for 3rd party projects - it's easy to use Icinga Logic with their own software.
-
 
 Whether you want connection with 3rd party system, connection to a CMDB or complement classic monitoring with complex system visualization - it all can be done.
 
@@ -41,6 +38,7 @@ To wake up our notebooks from weekend nap, let's start with a simple exercise:
     # up to date source code of Icinga Web 2 master branch:
     cd /usr/local
     git clone https://git.icinga.org/icingaweb2.git
+
 
 While git does its thing, let's read up the training plan:
 
@@ -183,58 +181,61 @@ Unless installing from repository, you'll have to set up the icingacli symlink -
 
 Icinga project builds weekly snapshots for various operating systems. The packages are available under [packages.icinga.org](https://packages.icinga.org/). Current build status can be seen on [build.icinga.org](https://build.icinga.org/jenkins/view/Icinga%20Web%202/) , and the current development code is available on [git.icinga.org](https://git.icinga.org/?p=icingaweb2.git) or [GitHub](https://github.com/Icinga/icingaweb2/).
 
+For purpose of this training session, we'll be working directly on git repository. It might even make sense in production - checksumming of all files, no modified data laying around undetected, switching versions taking merely seconds - which package manager can offer you all that? Besides, this approach nicely shows how simple Icinga Web 2 really is. There was no need to change any data in git copy for installation purposes. Automake, configure - what for? The configuration is elsewhere, and that's where the runtime environment is.
 
-Für unser Training nutzen wir aber direkt das Git-Repository. Und auch in Produktion mache ich das nicht ungern. Checksummen für alles, geänderte Dateien bleiben nie unentdeckt, Versionswechsel passieren in einem Sekundenbruchteil - welches Paketmanagement kann das schon bieten? Außerdem zeigt dieses Vorgehen schön, wie simpel Icinga Web 2 eigentlich ist. Wir mussten zur Installation keine einzige Datei im Quellverzeichnis ändern. Automake, configure? Wozu denn?! Die Konfiguration liegt woanders, und WO sie liegt wird der Laufzeitumgebung mitgeteilt.
+# Preparing your own module
 
-# Ein eigenes Modul erstellen
+## Where do I start?
 
-## Womit soll ich anfangen?
+The likely important question is often, what does one need to perform with their module. In our training we shall first experiment with existing features, and eventually apply them in a practical example.
 
-Die vermutlich wichtigste Frage ist meist, was man mit seinem Modul eigentlich anstellen möchte. In unserem Training werden wir erst mit den gegebenen Möglichkeiten experimentieren und anschließend ein kleines Praxis-Beispiel umsetzen.
 
-## Wie soll ich mein Modul nennen?
+## How should i call it?
 
-Sobald man weiß, was das Modul in etwa machen soll ist die schwierigste Aufgabe häufig die Wahl eines guten Namens. Im Idealfall geht daraus schon hervor, was das Modul eigentlich macht. Zu kompliziert soll der Name aber auch nicht sein, schließlich werden wir ihn in PHP-Namespaces, Verzeichnisnamen und in URLs verwenden.
+The next important problem is picking the right name for the module. Ideally it should reflect what it does. It should not be too complicated, as it will be used in PHP Namespaces, directory names and URLs.
 
-Für erste eigene Gehversuche bietet sich häufig der eigene (Unternehmens-)Name an. Unser favorisierte Modulename für unsere ersten Gehversuche in der Schulung heute ist `training`.
+For first baby steps, you can pick your own (Company) name. Our favorite choice for start is `training`.
 
-## Erstellen und Aktivieren eines neuen Modules
+
+## Installing and enabling a new module
 
     mkdir -p /usr/local/icingaweb-modules/training
     icingacli module list installed
     icingacli module enable training
 
-Fertig!
+All done!
 
-# Erweitern der Icinga CLI
+# Extending the Icinga CLI
 
 Die Icinga CLI wurde entworfen, um möglichst alles von dem was an Applikationslogik in Icinga Web 2 und dessen Modulen zur Verfügung steht auch auf der Kommandozeile bereitzustellen. Damit will das Projekt die Erstellung von Cronjobs, Plugins, nützlichen Tools und eventuell kleinen Diensten möglichst einfach gestalten.
 
-## Vim konfigurieren
+The Icinga CLI should represent, possibly everything from the application logic that can be performed from a command line. This should provide easy way to installing cronjobs, plugins, utilities and performing other small tasks.
 
-Wir arbeiten im Training mit VIM und nehmen ein paar erste Einstellungen vor:
+## Setting up Vim
+
+We're using vim in the training, and set up a few defaults to make things more readable later:
 
     echo 'syntax on
     set expandtab
     set tabstop=4
     set shiftwidth=4' > /root/.vimrc
 
-## Eigene CLI-Commands
+## Your own CLI commands
 
-Struktur der CLI Befehle:
+A structure of a cli command is:
 
-    icingacli <modul> <command> <action>
+    icingacli <module> <command> <action>
 
+Installation of custom cli commands is quite easy. They go in directory `application/commands` in your module location, and will be invoked by their names:
 
-Das Erstellen eines CLI-Kommandos ist denkbar einfach. Im Verzeichnis `application/clicommands` wird eine Datei erstellt, deren Name dem gewünschten Befehl entspricht:
 
     cd /usr/local/icingaweb-modules/training
     mkdir -p application/clicommands
     vim application/clicommands/HelloCommand.php
 
-Hierbei entspricht Hello dem gewünschten Kommando mit großem Anfangsbuchstaben. Die Endung Command MUSS immer drangesetzt werden.
+From here on, Hello (with a capital H) is a command referring to aforementioned file. The command must always come last.
 
-Beispiel-Command:
+Example command:
 
 ```php
 <?php
