@@ -251,23 +251,23 @@ class HelloCommand extends Command
 
 ## Namespaces
 
-* Namespaces helfen, um Module sauber gegeneinander abzugrenzen
-* Jedes Modul erhält einene Namespace, der sich aus dem Module-Namen ergibt:
+* Namespaces help to define borders of your module.
+* Each module receives its own namespace, named after it:
 
 ```
-Icinga\Module\<Modulname>
+Icinga\Module\<Name>
 ```
 
-* Der Anfangsbuchstabe MUSS hierbei jeweils groß geschrieben werden
-* Für CLI-Befehle steht ein dedizierter Namensraum Clicommands zur Verfügung
+* The starting letter MUST be uppercase.
+* For CLI commands there is a dedicated namespace Clicommands
 
-## Vererbung
+## Inheritance
 
-Sämtliche CLI-Commands MÜSSEN die Command-Klasse im Namesraum `Icinga\Cli` beerben. Dies bringt uns eine ganze Reihe von Vorteilen, auf die wir später noch eingehen werden. Wichtig ist, dass unser Klassenname dem Namen der Datei entspricht. In unsererer HelloCommand.php wäre dies also class HelloCommand.
+All CLI commands MUST inherit the Command class in `Icinga\Cli` namespace. That brings us an entire series of examples, which we'll focus later on. It's important that your class name match the data name. In our HelloCommand.php that will be HelloCommand.
 
-## Command-Actions
+## Command actions
 
-Jedes Command kann mehrere Actions bereitstellen. Jede neue öffentliche Methode, welche mit Action endet wird hierbei automatisch zu einer CLI command action:
+Each command can provide multiple actions. Each new available method that ends with Action will become a cli command action:
 
 ```php
 <?php
@@ -280,16 +280,14 @@ class HelloCommand extends Command
 }
 ```
 
-## Aufgabe 1
+## Example 1
 
 Wir erstellen ein CLI Command mit einer Action, welche folgendermaßen bedient wird und nachstehenden Output generiert:
-
-    icingacli training say hello
-
+We create a cli command with an Action, that will be used as follows and produce the following output:
 
 ## Bash Autocompletion
 
-Die Icinga CLI stellt Autovervollständigung für alle Module, Kommandos und Aktionen bereit. Installiert man Icinga Web 2 per Paket ist alles schon an der richtigen Stelle, für unsere Test-Umgebung legen wir manuell Hand an:
+Icinga CLI provides completion for all modules, commands and actions. Installation from packages sets up everything automatically, while our manual setup requires some work:
 
 ## Bash completion
 
@@ -297,12 +295,13 @@ Die Icinga CLI stellt Autovervollständigung für alle Module, Kommandos und Akt
     cp etc/bash_completion.d/icingacli /etc/bash_completion.d/
     . /etc/bash_completion
 
-Ist die Eingabe mehrdeutig wie bei `icingacli mo`, dann wird eine entsprechende Hilfe angezeigt.
+
+When given an unclear command, this will provide on screen help.
 
 
-## Inline-Dokumentation für CLI-Befehle
+## Inline documentation for cli commands
 
-Befehle und deren Aktionen können einfach über Inline-Kommentare dokumentiert werden. Der Kommentar-Text steht sofort auf der CLI als Hilfe zur Verfügung.
+Commands and their actions can be easily documented with inline comments. The commentary text will be provided as help on the command line.
 
 ```php
 <?php
@@ -326,7 +325,7 @@ class HelloCommand extends Command
         // ...
 ```
 
-Ein paar Beispiel-Kombinationen, wie die Hilfe angezeigt werden kann:
+A few example commands, where you can see the help text displayed:
 
     icingacli training
     icingacli training hello
@@ -334,8 +333,9 @@ Ein paar Beispiel-Kombinationen, wie die Hilfe angezeigt werden kann:
     icingacli training hello world --help
 
 Das Help-Kommando kann zu Beginn stehen oder an jeder beliebigen Stelle als Parameter mit `--` genutzt werden.
+The help command can be placed at beginning, or in any other place with `--` prefix.
 
-## Aufgabe 2
+## Example 2
 
 Erstelle und teste Dokumentation für eine `something` Aktion für den `say` Befehl im `training` Modul!
 
