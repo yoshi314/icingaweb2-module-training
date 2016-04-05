@@ -280,10 +280,9 @@ class HelloCommand extends Command
 }
 ```
 
-## Example 1
+## Exercise 1
 
-Wir erstellen ein CLI Command mit einer Action, welche folgendermaßen bedient wird und nachstehenden Output generiert:
-We create a cli command with an Action, that will be used as follows and produce the following output:
+Create a cli command with an Action, that will be used as follows and produce the following output:
 
 ## Bash Autocompletion
 
@@ -332,17 +331,16 @@ A few example commands, where you can see the help text displayed:
     icingacli help training hello
     icingacli training hello world --help
 
-Das Help-Kommando kann zu Beginn stehen oder an jeder beliebigen Stelle als Parameter mit `--` genutzt werden.
 The help command can be placed at beginning, or in any other place with `--` prefix.
 
-## Example 2
+## Exercise 2
 
-Erstelle und teste Dokumentation für eine `something` Aktion für den `say` Befehl im `training` Modul!
+Provide and test documentation for a `something` action to a `say` command in the `training` module.
 
 
-## Kommandozeilenparameter
+## Command line parameters.
 
-Wir können Kommandozeilen-Parameter natürlich vollumfänglich selbst kontrollieren, nutzen und steuern. Dank Vererbung steht die entsprechende Instanz von `Icinga\Cli\Params` schon in `$this->params` bereit. Das Objekt verfügt über eine `get()`-Methode, welcher wir den gewünschten Parameter und optional einen Default-Wert mitgeben können. Ohne Default-Wert erhalten wir `null`, falls der entsprechende Parameter nicht mitgegeben wird.
+We can control the command line parameters. Thanks to inheritance, we are provided with an instance of `Icinga\Cli\Params` in `$this->params` , ready to use. The object is accessible through `get()` method, which can extract the parameter values, along with option to provide a default value. Otherwise, they default to `null`.
 
 ```php
 <?php
@@ -361,16 +359,16 @@ Wir können Kommandozeilen-Parameter natürlich vollumfänglich selbst kontrolli
     }
 ```
 
-### Beispiel-Aufruf:
+### Example invocation
 
     icingacli training hello from --from Nürnberg
     icingacli training hello from --from "Netways Training"
     icingacli training hello from --help
     icingacli training hello from
 
-## Standalone-Parameter
+## Standalone parameters
 
-Es ist nicht zwingend erforderlich, jedem Parameter einen Bezeichner zuzuordnen. Wer möchte, kann auch einfach Parameter aneinanderreihen. Am bequemsten sind diese über die `shift()`-Methode zugänglich:
+It is not necessary to assign values to parameters. If you wish, you can easily read in parameters in a sequence. One of easier ways is to do it with `shift()` method.
 
 ```php
 <?php
@@ -389,15 +387,15 @@ public function fromAction()
 }
 ```
 
-### Beispiel-Aufruf
+### Example invocation
 
     icingacli training hello from Nürnberg
 
-## Shiften macht Freude
+## Shifting is fun
 
-Die Methode `shift()` verhält sich so, wie man das von gängigen Programmiersprachen gewohnt ist. Der erste Parameter der Liste wird zurückgeliefert und von der Liste entfernt. Ruft man `shift()` mehrmals hintereinander auf, werden alle vorhandenen Standalone-Parameter zurückgeliefert, bis keiner mehr vorhanden ist. Mit `unshift()` kann man so eine Aktion jederzeit wieder rückgängig machen.
+The method `shift()` behaves the way programmers are already used to. First parameter from the list gets returned and discarded from it. Subsquent invocations return subsequent arguments from the list, as long as there are any left. With `unshift()`, it's possible to go back through the list.
 
-Ein Spezialfall ist `shift()` mit einem Bezeichner (key) als Parameter. So würde `shift('to')` nicht nur den Wert des Parameters `--to` zurückliefern, sondern diesen auch unabhängig von seiner Position aus dem Params-Objekt entfernen. Auch hier ist es möglich, einen Standardwert mitzugeben:
+A special case is calling `shift()` with a indicator (key) as parameter. So `shift(to)` would not only return the value to `--to` parameter, but also do it independently from its current position in the argument list. It's also possible to provide a fallback value, as before: 
 
 ```php
 <?php
@@ -405,6 +403,7 @@ Ein Spezialfall ist `shift()` mit einem Bezeichner (key) als Parameter. So würd
 $person = $this->params->shift('from', 'Nobody');
 ```
 
+It works the same way for standalone parameters. 
 Das geht natürlich auch für Standalone-Parameter. Da wir durch den optionalen Bezeichner (key) den ersten Parameter von `shift()` schon belegt haben, jetzt aber für den zweiten (Standardwert) dennoch etwas setzen möchten, setzen wir den Bezeichner hier einfach auf null:
 
 ```php
