@@ -393,7 +393,7 @@ public function fromAction()
 
 ## Shifting is fun
 
-The method `shift()` behaves the way programmers are already used to. First parameter from the list gets returned and discarded from it. Subsquent invocations return subsequent arguments from the list, as long as there are any left. With `unshift()`, it's possible to go back through the list.
+The method `shift()` behaves the way programmers are already used to. First parameter from the list gets returned and removed from the list. Subsquent invocations return subsequent arguments from the list, as long as there are any left. With `unshift()`, it's possible to go back through the list.
 
 A special case is calling `shift()` with a indicator (key) as parameter. So `shift(to)` would not only return the value to `--to` parameter, but also do it independently from its current position in the argument list. It's also possible to provide a fallback value, as before: 
 
@@ -403,7 +403,7 @@ A special case is calling `shift()` with a indicator (key) as parameter. So `shi
 $person = $this->params->shift('from', 'Nobody');
 ```
 
-It works the same way for standalone parameters. 
+It works the same way for standalone parameters. We have provided the first parameter to `shift()` through the optional (key) identifier, and to set the default value to something at the same time, we set it to null.
 Das geht natürlich auch für Standalone-Parameter. Da wir durch den optionalen Bezeichner (key) den ersten Parameter von `shift()` schon belegt haben, jetzt aber für den zweiten (Standardwert) dennoch etwas setzen möchten, setzen wir den Bezeichner hier einfach auf null:
 
 ```php
@@ -416,19 +416,21 @@ public function fromAction()
 }
 ```
 
-### Beispiel-Aufruf
+### Example invocation
 
     icingacli training hello from Nürnberg
     icingacli training hello from
     icingacli training hello from --help
 
-## API-Dokumentation
+## API Documentation
 
 Die Params-Klasse im `Icinga\Cli` namespace dokumentiert noch weitere Methoden und deren Parameter. Diese sind am bequemsten in der API-Dokumentation zugänglich. Diese lässt sich mit phpDocumentor generieren, in Kürze dürfte es dazu auch einen CLI-Befehl geben.
 
-## Aufgabe 3
+The Parameter class in `Icinga\Cli` namespace documents further methods and their parameters. Those are easily accessible in the API Documentation, which can be easily generated through phpDocumentator. This may provide us with an opportunity to use them for our cli command.
 
-Erweitere den say-Befehl, um alle folgenden Variangen zu unterstützen:
+## Exercise 3
+
+Extend the say example, so that it supports all the following variants:
 
     icingacli training say hello World
     icingacli training say hello --to World
@@ -439,6 +441,7 @@ Erweitere den say-Befehl, um alle folgenden Variangen zu unterstützen:
 ## Exceptions
 
 Icinga Web 2 will sauberen PHP-Code fördern. Dazu gehört nebst anderem, dass sämtliche Warnings Fehler generieren. Zum Error-Handling werden Fehler geworfen. Wir können das einfach ausprobieren:
+Icinga Web 2 prefers clean PHP Code. That means, it should not cause execution warnings. Error handling simply means throwing errors. We can test this quickly:
 
 ```php
 <?php
@@ -448,24 +451,24 @@ use Icinga\Exception\ProgrammingError;
 /**
  * This action will always fail
  */
-public function kaputtAction()
+public function failAction()
 {
     throw new ProgrammingError('No way');
 }
 ```
 
-### Aufruf
+### Invocation
 
-    icingacli training hello kaputt
-    icingacli training hello kaputt --trace
+    icingacli training hello fail
+    icingacli training hello fail --trace
 
 ## Exit-Codes
 
-Wie wir sehen, fängt die CLI sämtliche Exceptions und gibt angenehm lesbare Fehlermeldungen nebst farbigem Hinweis auf den Fehler aus. Der Exit-Code ist in diesem Fall immer 1:
+As we can see, CLI catches various exceptions and gives easily readable error messages with colorful annotation of the error. The exit code in this case is always 1:
 
     echo $?
 
-Damit lassen sich fehlgeschlagene Jobs zuverlässig auswerten. Nur der Exit-Code 0 steht für erfolgreiche Ausführung. Natürlich steht es jedem frei, zusätzlich weitere Exit-Codes zu benutzen. Dies erledigt man in PHP mittels `exit($code)`. Beispiel:
+This way failed jobs can be reliably analyzed. The exit code 0 is only returned for successful execution. It is possible to use other return codes. This can be handled in PHP with `exit($code)`. For example:
 
 ```php
 <?php
@@ -473,41 +476,42 @@ echo "CRITICAL\n";
 exit(2);
 ```
 
-Alternativ stellt Icinga Web in der Command-Klasse die `fail()`-Funktion bereit. Sie ist eine Abkürzung für ein farbiges "ERROR", eine Status-Ausgabe und `exit(1)`:
+Alternatively, Icinga Web provides a `fail()` function in its Command class. It's a shortened verison for colorful "ERROR", status message and `exit(1)`:
 
 ```php
 <?php
-$this->fail('Ein Fehler ist passiert');
+$this->fail('An error occured');
 ```
 
-## Farben?
+## Colors?
 
-Wie wir eben gesehen haben, kann die Icinga CLI farbigen Output erstellen. Über die Screen-Klasse im `Icinga\Cli` Namensraum stehen nützliche Hilfsfunktionen hierzu bereit. Wir greifen in unseren Command-Klassen über `$this->screen` darauf zu. So lässt sich die Ausgabe farbig gestalten:
+As we've just saw, Icinga CLI can color the outpout. The Screen class in `Icinga\Cli` namespace provides useful helper functions. We'll take advantage of that for the next exercise:
 
 ```php
 <?php
 echo $this->screen->colorize("Hello from $from!\n", 'lightblue');
 ```
 
-Als optionalen dritten Parameter kann man der `colorize()`-Funktion eine Hintergrundfarbe mitgeben. Für die Darstellung der Farben werden ANSI escape codes benutzt. Erkennt Icinga CLI, dass die Ausgabe NICHT auf in ein Terminal/TTY erfolgt, werden keine Farben ausgegeben. Damit wird sichergestellt, dass z.B. beim Umleiten der Ausgabe in eine Datei keine störenden Sonderzeichen aufscheinen.
+The optional third parameter to `colorize()` can set the background color. Colors are set using ANSI escape codes. If the output is not directed to CLI, no color codes are emitted. This makes sure that no unreadable control characters get emitted to e.g. log files.
 
-> Um das Terminal zu erkennen, wird die POSIX-Erweiterung von PHP genutzt. Ist diese nicht vorhanden, werden ebenfalls vorsichtshalber keine ANSI-Codes verwendet.
+> In order to detect the terminal, PHP POSIX extensions are used. If those are not available, no ANSI codes are emitted.
 
-Weiter nützliche Funktionen in der Screen-Klasse sind:
+Other useful functions of Screen class are:
 
-* `clear()` um den Bildschirm zu löschen (wird von `--watch` benutzt)
-* `underline()` um Text zu unterstreichen
-* `newlines($count = 1)` um einen oder mehrere Zeilenumbrüche auszugeben
-* `strlen()` um die Zeichenbreite ohne ANSI-Codes zu ermitteln
-* `center($text)` um Text abhängig von der Bildschirmbreite zentriert auszugeben
-* `getRows()` und `getColumns()` um wo möglich den verwendbaren Platz zu ermitteln
-* `hasUtf8()` um UTF8-Unterstützung des Terminals abzufragen
+* `clear()` to erase the display (used with `--watch`)
+* `underline()` to underline the text
+* `newlines($count = 1)` to start a new line
+* `strlen()` to provide line length (without ANSI codes)
+* `center($text)` to center the text on the line
+* `getRows()` and `getColumns()` to display usable screen space, when possible.
+* `hasUtf8()` to query the terminal for UTF8 compatibility
 
-Vorsicht: klappt natürlich nicht um herauszufinden, dass jemand in einem UTF8-Terminal mit einem ISO8859 Putty unterwegs ist. 
+Warning: it's not uncommon to find people using UTF8 Terminals with Putty client in ISO8859 encoding.
 
-### Aufgabe
+### Exercise
 
 Unsere `hello`-Aktion im `say`-Befehl soll den Text in Farbe und sowohl horizontal als auch vertikal zentriert ausgeben. Wir nutzen `--watch`, um die Ausgabe abwechselnd in mindestens zwei Farben blinken zu lassen.
+Our `hello` action in `say` command should color the text and center it horizonally and vertically. We'll use the `--watch` option, so that the output can change back and forth between two colors.
 
 # Das eigene Modul im Web-Frontend
 
